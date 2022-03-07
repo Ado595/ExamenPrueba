@@ -1,0 +1,153 @@
+﻿@model IEnumerable<ExamenPrueba.Models.Empleado>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Area: <select name="area" class="form-control" asp-items="ViewBag.Areas"></select>
+            <input type="submit" value="Search" class="btn btn-primary" />
+        </p>
+    </div>
+</form>
+
+<table class="table Datatable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreCompleto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cedula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaNacimiento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaIngreso)
+            </th>
+            <th>
+                Area
+            </th>
+            <th>
+                Jefe
+            </th>
+            <th>
+                Habilidades
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreCompleto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cedula)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Correo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaIngreso)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdAreaNavigation.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdJefeNavigation.NombreCompleto)
+                </td>
+                <td>
+                    <form asp-action="Index" asp-controller="EmpleadoHabilidad" method="get">
+                        <input type="hidden" name="idEmpleado" asp-for="@item.IdEmpleado" />
+                        <input type="submit" value="Ver Habilidades" class="btn btn-secondary" />
+                    </form>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdEmpleado" >Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdEmpleado">Details</a> |
+                    <a style="cursor:pointer" onclick="deleteConfirm('@item.IdEmpleado')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!--bootstra pop up confirmation dialog-->
+<div class="modal fade" id="delete-conformation" tabindex="-1" role="dialog" aria-labelledby="deleteconformation">
+    <div class="modal-dialog" style="width:501px !important;margin:0 auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delete-conformation">
+                    Eliminar
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <span>
+                                ¿Esta seguro de eliminar el registro?
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-danger" value="Delete" onclick="deleteData()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+
+        var deleteValue = 0;
+        var deleteConfirm = function (val) {
+            deleteValue = val;
+            $('#delete-conformation').modal('show');
+        }
+        var deleteData = function () {
+            var id = deleteValue;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete","Empleados")',
+            data:{id: id},
+            success: function (result) {
+                $("#delete-conformation").modal('hide');
+                document.location.reload(true)
+            },
+            error: function () {
+                $("#delete-conformation").modal('hide');
+                document.location.reload(true)
+            }
+        });
+            deleteValue = 0;
+       }
+
+    </script>
+}
+

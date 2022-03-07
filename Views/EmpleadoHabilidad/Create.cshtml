@@ -1,0 +1,47 @@
+﻿@model ExamenPrueba.Models.Empleado_Habilidad
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Empleado_Habilidad</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input id="hid" type="hidden" asp-for="IdEmpleado" value="@ViewBag.idEmpleado" />
+                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreHabilidad" class="control-label"></label>
+                <input id="NombreHabilidad" asp-for="NombreHabilidad" class="form-control" />
+                <span asp-validation-for="NombreHabilidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $(function () {
+
+        $("#NombreHabilidad").autocomplete({
+            source: '@Url.Action("GetHabilidadesSug","EmpleadoHabilidad")'
+        });
+    });
+</script>
+}

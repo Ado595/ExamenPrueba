@@ -1,0 +1,16 @@
+﻿@model List<Empleado>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            <label>@item.NombreCompleto</label>
+        </li>
+        @if (item.InverseIdJefeNavigation.Count > 0)
+        {
+            <li>
+                @await Html.PartialAsync("_ChildEmpleados", item.InverseIdJefeNavigation.ToList())
+            </li>
+        }
+    }
+</ul>

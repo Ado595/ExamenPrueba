@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ExamenPrueba.Models.Area>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdArea">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdArea">Details</a> |
+                    <a style="cursor:pointer" onclick="deleteConfirm('@item.IdArea')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--bootstra pop up confirmation dialog-->
+<div class="modal fade" id="delete-conformation" tabindex="-1" role="dialog" aria-labelledby="deleteconformation">
+    <div class="modal-dialog" style="width:501px !important;margin:0 auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delete-conformation">
+                    Eliminar
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <span>
+                                ¿Esta seguro de eliminar el registro?
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-danger" value="Delete" onclick="deleteData()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var deleteValue = 0;
+        var deleteConfirm = function (val) {
+            deleteValue = val;
+            $('#delete-conformation').modal('show');
+        }
+        var deleteData = function () {
+            $('#divLoading').show();
+            var id = deleteValue;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete","Areas")',
+            data:{id: id},
+            success: function (result) {
+                $("#delete-conformation").modal('hide');
+                document.location.reload(true)
+            },
+            error: function () {
+                $("#delete-conformation").modal('hide');
+                document.location.reload(true)
+            }
+        });
+            deleteValue = 0;
+       }
+    </script>
+}

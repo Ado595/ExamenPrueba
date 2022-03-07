@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            OPCIONES
+        </div>
+        <div class="card-body">
+            <div class="input-group">
+                <a class="btn btn-outline-primary btn-lg btn-block" asp-controller="Areas" asp-action="Index">Areas</a>
+                <a class="btn btn-outline-secondary btn-lg btn-block" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                <a class="btn btn-outline-info btn-lg btn-block" asp-controller="Empleados" asp-action="TreeEmpleados">Arbol de empleados</a>
+            </div>
+        </div>
+    </div>
+</div>
